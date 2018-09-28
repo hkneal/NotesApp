@@ -1,0 +1,36 @@
+<footer id="myFooter" class="page-footer font-small pt-2 fixed-bottom">
+
+    <!-- Footer Elements -->
+    <div class="container">
+
+      <!-- Social buttons -->
+      <ul class="list-unstyled list-inline text-center">
+        <li class="list-inline-item">
+          <a href='https://www.github.com/hkneal'class="btn-floating btn-fb mx-1">
+            <i class="fa fa-github"> </i>
+          </a>
+        </li>
+        <li class="list-inline-item">
+          <a href='https://www.linkedin.com/in/hiram-neal' class="btn-floating btn-li mx-1">
+            <i class="fa fa-linkedin"> </i>
+          </a>
+        </li>
+      </ul>
+      <!-- Social buttons -->
+
+    </div>
+    <!-- Footer Elements -->
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2018 Copyright:
+      <a href="http://www.hiramneal.com"> HiramNeal.com</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<script>
+  var me = document.currentScript.ownerDocument;
+  var post = me.querySelector('#myFooter');
+
+  var container = document.querySelector('#container');
+  container.appendChild(post.cloneNode(true));
+</script>

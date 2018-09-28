@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+  <head>
+    <meta charset="utf-8">
+    <title>Create Note</title>
+    {% load staticfiles %}
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- <link href="{% static 'notes_app/css/bootstrap.min.css' %}" rel="stylesheet"> -->
+    <!-- Material Design Bootstrap -->
+    <link href="{% static 'notes_app/css/mdb.min.css' %}" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="{% static 'notes_app/css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'notes_app/css/main.css' %}" media="screen" title="no title"  charset="utf-8">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    {% load staticfiles %}
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="#">NotesApp</a>
+
+    </nav>
+    <!--/.Navbar-->
+
+    <header class="menuHeader">
+      <h1>Welcome {{ user.first_name }},</h1>
+      <h4>To submit your changes to the note click the "Update" button. </h4>
+    </header>
+
+    <main>
+    <div class="card mb-5">
+      <div class="card-body mb-5 pb-5">
+        <div class="container">
+          <div class="form-group">
+            <form  role="form" action="{% url 'createNote' %}" method="post" novalidate>
+              {% csrf_token %}
+              <div class="form-group">
+                  {% for field in form %}
+                  <div class="form-group md-form">
+                    <!-- {{ field.label_tag }} -->
+                    {{ field }}
+                    <label id="fieldLabel" style="width: 100%" for="{{ field.name }}" data-error="{{ field.help_text }}" >{{ field.label }}</label>
+                    {% if field.errors %}
+                      {% for error in field.errors %}
+                        <small><a href="#id_{{ field.name }}">{{ error|escape }}</a></small>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                  <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1" size="2x"></i>Cancel</a>
+                  <button class="btn btn-success btn-rounded float-right" type="submit"><i class="fa fa-check-square-o mr-1" size="2x"></i>Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="{% static 'notes_app/js/jquery-3.3.1.min.js' %}"></script>
+    <!-- MDBootstrap -->
+    <script type="text/javascript" src="{% static 'notes_app/js/mdb.min.js' %}"></script>
+    </main>
+    </body>
+
+    <footer class="page-footer font-small pt-2 bottom">
+
+        <!-- Footer Elements -->
+        <div class="container">
+
+          <!-- Social buttons -->
+          <ul class="list-unstyled list-inline text-center">
+            <li class="list-inline-item">
+              <a href='https://www.github.com/hkneal'class="btn-floating btn-fb mx-1">
+                <i class="fa fa-github"> </i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href='https://www.linkedin.com/in/hiram-neal' class="btn-floating btn-li mx-1">
+                <i class="fa fa-linkedin"> </i>
+              </a>
+            </li>
+          </ul>
+          <!-- Social buttons -->
+
+        </div>
+        <!-- Footer Elements -->
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2018 Copyright:
+          <a href="http://www.hiramneal.com"> HiramNeal.com</a>
+        </div>
+        <!-- Copyright -->
+      </footer>
+    </html>

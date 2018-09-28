@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+  <head>
+    <meta charset="utf-8">
+    <title>Notes Page</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- <link href="{% static 'notes_app/css/bootstrap.min.css' %}" rel="stylesheet"> -->
+    <!-- Material Design Bootstrap -->
+    <link href="{% static 'notes_app/css/mdb.min.css' %}" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="{% static 'notes_app/css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'notes_app/css/main.css' %}" media="screen" title="no title"  charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="{% url 'index' %}">NotesApp</a>
+
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="basicExampleNav">
+
+            <!-- Links -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'accounts' %}">Account Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li> -->
+
+                <!-- Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'index' %}">Login</a>
+                        <a class="dropdown-item" href="{% url 'Logout' %}">Logout</a>
+                    </div>
+                </li>
+
+            </ul>
+            <!-- Links -->
+
+            <form class="form-inline" >
+                <div class="md-form my-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="search">
+                </div>
+            </form>
+        </div>
+        <!-- Collapsible content -->
+
+    </nav>
+    <!--/.Navbar-->
+    <header class="menuHeader">
+      <h1>Welcome {{ user.first_name }},</h1>
+      <h4>Below you will find all your notes.  For a new note, click the create button. </h4>
+      <a class="btn btn-mdb-color btn-rounded" href="{% url 'createNote' %}"><i class="fa fa-pencil-square-o mr-1" size="2x"></i>Create</a>
+      <!-- <a class="btn btn-mdb-color btn-rounded" href="{% url 'Logout' %}"><i class="fa fa-sign-out mr-1" size="2x"></i>Logout</a> -->
+    </header>
+
+    <main>
+
+    {% if error_message %}
+    <div class="card mb-5">
+      <div class="card-body mb-5 pb-5">
+        <div class="container">
+          <div class="form-group">
+              <div class="alert alert-danger" role="alert">
+                {{ error_message }}
+              </div>
+            {% endif %}
+            {% if success_message %}
+              <div class="alert alert-success" role="alert">
+                {{ success_message }}
+              </div>
+            {% endif %}
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-success" role="alert">
+                  {{ message }}
+                </div>
+              {% endfor%}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if notes_List %}
+    <div class="container">
+        <div class="card mb-5">
+            <div id="noteRow" class="row">
+            {% for note in notes_List %}
+              <div class="col-md-auto">
+                <div class="card-body mb-5">
+                  <!-- trigger modal -->
+                  <a id="noteA-tag" href="#{{ note.id }}" data-toggle="modal" data-target="#{{ note.id }}">
+                    <img src="{% static 'notes_app/img/stickyNote.png' %}" alt="thumbnail" style="width: 10rem">
+                    <p id="noteTitle">{{ note.title }}</p>
+                  </a>
+                    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicExampleModal">
+                      Launch demo modal
+                    </button> -->
+                  <!-- Central Modal Small -->
+                  <div class="modal fade" id="{{ note.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+                      <!-- Change class .modal-sm to change the size of the modal -->
+                      <div class="modal-dialog" role="document">
+
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title w-100" id="myModalLabel">{{ note.title }}</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <!-- <img src="{% static 'notes_app/img/stickyNote.png' %}" alt="thumbnail" style="width: 10rem"> -->
+                            <p> {{ note.note }}</p>
+                            <small> Current Labels:
+                              {% for label in note.label_set.all %}
+                                {{ label.label }}.
+                              {% endfor %}
+                            </small>
+                          </div>
+                          <div class="modal-footer">
+                            <a class="btn btn-mdb-color btn-rounded float-left" href="{% url 'createLabel' note.id %}"><i class="fa fa-bookmark-o mr-1" size="2x"></i>Label</a>
+                            <a class="btn btn-mdb-color btn-rounded float-left" href="{% url 'update_note' note.id %}"><i class="fa fa-check-square-o mr-1" size="2x"></i>Update</a>
+                            <a class="btn btn-danger btn-rounded float-left" href="{% url 'delete_note' note.id %}"><i class="fa fa-trash-o mr-1" size="2x"></i>Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+    {% endif %}
+
+    <!-- Create a new Note Form -->
+    {% if createNoteForm %}
+    <div class="card mb-5">
+      <div class="card-body mb-5 pb-5">
+        <div class="container">
+          <div class="form-group">
+            <form  role="form" action="{% url 'createNote' %}" method="post" novalidate>
+              {% csrf_token %}
+              <div class="form-group">
+                  {% for field in createNoteForm %}
+                  <div class="form-group md-form">
+                    <!-- {{ field.label_tag }} -->
+                    {{ field }}
+                    <label id="fieldLabel" style="width: 100%" for="{{ field.name }}" data-error="{{ field.help_text }}" >{{ field.label }}</label>
+                    {% if field.errors %}
+                      {% for error in field.errors %}
+                        <small><a href="#id_{{ field.name }}">{{ error|escape }}</a></small>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                  <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1" size="2x"></i>Cancel</a>
+                  <button class="btn btn-success btn-rounded float-right" type="submit">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+      <!-- Create Label Form -->
+      {% if createLabelForm %}
+      <div class="card mb-5">
+        <p id="note_intro">This will create a searchable label tag for the note titled: {{ noteTitle }} </p>
+        <div class="card-body mb-5 pb-5">
+          <div class="container">
+            <form role="form" action="{% url 'createLabel' note_id %}" method="post" novalidate>
+              {% csrf_token %}
+              <div class="form-group">
+                  {% for field in createLabelForm %}
+                  <div class="form-group md-form">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    <label id="fieldLabel" style="width: 100%" for="{{ field.name }}" data-error="{{ field.help_text }}" >{{ field.label }}</label>
+                    {% if field.errors %}
+                      {% for error in field.errors %}
+                        <small><a href="#id_{{ field.name }}">{{ error|escape }}</a></small>
+                      {% endfor %}
+                    {% endif %}
+                    <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1" size="2x"></i>Cancel</a>
+                    <button class="btn btn-success btn-rounded float-right" type="submit">Add Label</button>
+                  </div>
+                  {% endfor %}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="{% static 'notes_app/js/jquery-3.3.1.min.js' %}"></script>
+    <!-- MDBootstrap -->
+    <script type="text/javascript" src="{% static 'notes_app/js/mdb.min.js' %}"></script>
+    </main>
+  </body>
+    <footer class="page-footer font-small pt-2 bottom">
+
+        <!-- Footer Elements -->
+        <div class="container">
+
+          <!-- Social buttons -->
+          <ul class="list-unstyled list-inline text-center">
+            <li class="list-inline-item">
+              <a href='https://www.github.com/hkneal'class="btn-floating btn-fb mx-1">
+                <i class="fa fa-github"> </i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href='https://www.linkedin.com/in/hiram-neal' class="btn-floating btn-li mx-1">
+                <i class="fa fa-linkedin"> </i>
+              </a>
+            </li>
+          </ul>
+          <!-- Social buttons -->
+
+        </div>
+        <!-- Footer Elements -->
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2018 Copyright:
+          <a href="http://www.hiramneal.com"> HiramNeal.com</a>
+        </div>
+        <!-- Copyright -->
+      </footer>
+
+  <!-- <script>
+    $(document).ready(function () {
+      console.log("Ready")
+      var myVar = document.getElementById("myVar").value;
+      console.log(myVar)
+
+    });
+  </script> -->
+</html>
