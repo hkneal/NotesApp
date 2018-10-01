@@ -8,8 +8,6 @@ from . import views
 
 from .forms import LoginForm
 
-#Django 2.0 needed for namespace in main.urls
-
 urlpatterns = [
   path('', views.index, name='index'),
   path('index/', views.index, name='index'),  	#With Django 2.0
@@ -19,6 +17,7 @@ urlpatterns = [
   path('accounts/password_reset/', auth_views.PasswordResetView.as_view(template_name='notes_app/registration/password_reset_form.html'), name='reset'),
   path('accounts/password_reset/done/', auth_views.PasswordResetView.as_view(template_name='notes_app/registration/password_reset_done.html')),
   path('accounts/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='notes_app/registration/password_reset_confirm.html')),
+  path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='notes_app/registration/password_reset_complete.html')),
   path('accounts/', include('django.contrib.auth.urls')),
   path('activate/<uidb64>/<token>/', views.activate, name='activate'),
   path('accounts/createNote', views.NoteCreate.as_view(), name='createNote'),
