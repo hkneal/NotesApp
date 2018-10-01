@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from apps.notes_app.models import Note, Label
 
-class NoteRUDSerializer(serializers.ModelSerializer):
+class NoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Note
-        fields = ['pk', 'title', 'note', 'created_at', 'updated_at', 'notes_list']
-        read_only_fields = ['pk', 'notes_list', 'created_at', 'updated_at']
+        fields = ['pk', 'title', 'note', 'created_at', 'updated_at', 'notes']
+        read_only_fields = ['pk', 'notes', 'created_at', 'updated_at']
 
         def validate_title(self, title):
             if len(title) <= 0:
@@ -18,9 +18,9 @@ class NoteRUDSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("This field is required and should be 500 charactes or less.")
             return note
 
-class LabelRUDSerializer(serializers.ModelSerializer):
-
+class LabelSerializer(serializers.ModelSerializer):
+    labels = NoteSerializer
     class Meta:
         model = Label
-        fields = ['pk', 'created_at', 'label', 'labels_list']
-        read_only_fields = ['pk', 'labels_list', 'created_at', 'updated_at']
+        fields = ['pk', 'created_at', 'label', 'labels']
+        read_only_fields = ['pk', 'created_at', 'updated_at']
