@@ -19,4 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.notes_app.urls')),
+    path('api/notes_api/', include('apps.notes_app.api.urls')),
+    path('api/labels_api/', include('apps.notes_app.api.urls')),
 ]

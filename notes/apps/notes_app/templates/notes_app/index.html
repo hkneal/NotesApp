@@ -1,79 +1,6 @@
-<!DOCTYPE html>
-<html lang='en-US'>
-  <head>
-    <meta charset="utf-8">
-    <title>Index Page</title>
-    {% load staticfiles %}
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- <link href="{% static 'notes_app/css/bootstrap.min.css' %}" rel="stylesheet"> -->
-    <!-- Material Design Bootstrap -->
-    <link href="{% static 'notes_app/css/mdb.min.css' %}" rel="stylesheet">
-    <!-- Your custom styles (optional) -->
-    <link href="{% static 'notes_app/css/style.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'notes_app/css/main.css' %}" media="screen" title="no title"  charset="utf-8">
+{% extends 'notes_app/base.html' %}
 
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-  </head>
-
-
-  <body>
-    <!--Navbar-->
-<nav class="navbar navbar-expand-lg navbar-dark primary-color">
-
-    <!-- Navbar brand -->
-    <a class="navbar-brand" href="{% url 'index' %}">NotesApp</a>
-
-    <!-- Collapse button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="basicExampleNav">
-
-        <!-- Links -->
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'accounts' %}">Account Home
-                    <span class="sr-only">(current)</span>
-                </a>
-            </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-            </li> -->
-
-            <!-- Dropdown -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
-                <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{% url 'index' %}">Login</a>
-                    <a class="dropdown-item" href="{% url 'Logout' %}">Logout</a>
-                </div>
-            </li>
-
-        </ul>
-        <!-- Links -->
-
-        <form class="form-inline">
-            <div class="md-form my-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            </div>
-        </form>
-    </div>
-    <!-- Collapsible content -->
-
-</nav>
-<!--/.Navbar-->
-
-    <main>
+{% block content %}
       <header class="menuHeader">
           <h1>NotesApp, Version 1.0</h1>
       </header>
@@ -96,14 +23,14 @@
                           <a href="#step-3" type="button" class="btn btn-pink btn-circle-3 waves-effect p-3" data-toggle="tooltip" data-placement="top" title="Verify Email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
                       </div>
                       <div class="steps-step-3 no-height">
-                          <a href="#step-4" type="button" class="btn btn-pink btn-circle-3 waves-effect p-3" data-toggle="tooltip" data-placement="top" title="Login"><i class="fa fa-sign-in" aria-hidden="true"></i></a>
+                          <a href="{% url 'login' %}" type="button" class="btn btn-pink btn-circle-3 waves-effect p-3" data-toggle="tooltip" data-placement="top" title="Login"><i class="fa fa-sign-in" aria-hidden="true"></i></a>
                       </div>
                   </div>
               </div>
           </div>
 
-          <!-- Grid column -->
           <div class="col-md-7">
+          <!-- Grid column -->
           {% if signupForm %}
           <!-- First Step -->
               <form  role="form" action="{% url 'signup' %}" method="post" novalidate>
@@ -122,7 +49,6 @@
                             {{ success_message }}
                           </div>
                         {% endif %}
-                        {% block content %}
                         {% for field in signupForm %}
                           {% if field.name in firstList %}
                             <div class="form-group md-form">
@@ -143,20 +69,11 @@
                 </div>
 
                 <!-- Second Step -->
+                <div id="jumpto">
                 <div class="row setup-content-3" id="step-2">
                     <div class="col-md-12">
                       <div class="form-group">
                         <h3 class="font-weight-bold pl-0 my-4"><strong>Create a New Account (Step 2)</strong></h3>
-                        {% if error_message %}
-                          <div class="alert alert-danger" role="alert">
-                            {{ error_message }}
-                          </div>
-                        {% endif %}
-                        {% if success_message %}
-                          <div class="alert alert-success" role="alert">
-                            {{ success_message }}
-                          </div>
-                        {% endif %}
                         {% for field in signupForm %}
                           {% if field.name not in firstList %}
                             <div class="form-group md-form">
@@ -175,6 +92,7 @@
                       </div>
                     </div>
                 </div>
+              </div>
 
                 <!-- Third Step -->
                 <div class="row setup-content-3" id="step-3">
@@ -188,142 +106,8 @@
                   </div>
                 </div>
               </form>
-              {% endblock %}
           {% endif %}
 
-
-
-          {% if loginForm %}
-          <!-- Fourth Step -->
-              <form  role="form" action="{% url 'Login' %}" method="post" novalidate>
-                {% csrf_token %}
-                <div class="row setup-content-3" id="step-4">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <h3 class="font-weight-bold pl-0 my-4"><strong>Login</strong></h3>
-                        {% if error_message %}
-                          <div class="alert alert-danger" role="alert">
-                            {{ error_message }}
-                          </div>
-                        {% endif %}
-                        {% if success_message %}
-                          <div class="alert alert-success" role="alert">
-                            {{ success_message }}
-                          </div>
-                        {% endif %}
-                        {% for field in loginForm %}
-                          <div class="form-group md-form">
-                            <!-- {{ field.label_tag }} -->
-                            {{ field }}
-                            <label id="fieldLabel" style="width: 100%" for="{{ field.name }}" data-error="{{ field.help_text }}" >{{ field.label }}</label>
-                            {% if field.errors %}
-                              {% for error in field.errors %}
-                                <small><a href="#id_{{ field.name }}">{{ error|escape }}</a></small>
-                              {% endfor %}
-                            {% endif %}
-                          </div>
-                        {% endfor %}
-                        <button class="btn btn-success btn-rounded float-right" type="submit">Submit</button>
-                      </div>
-                    </div>
-                </div>
-              </form>
-              {% endif %}
           </div>
-      </div>
-
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-      <!-- JQuery -->
-      <script type="text/javascript" src="{% static 'notes_app/js/jquery-3.3.1.min.js' %}"></script>
-      <!-- MDBootstrap -->
-      <script type="text/javascript" src="{% static 'notes_app/js/mdb.min.js' %}"></script>
-
-      <script type="text/javascript">
-      $(document).ready(function () {
-          var navListItems = $('div.setup-panel-3 div a'),
-              allWells = $('.setup-content-3'),
-              allNextBtn = $('.nextBtn-3'),
-              allPrevBtn = $('.prevBtn-3');
-
-          allWells.hide();
-
-          navListItems.click(function (e) {
-              e.preventDefault();
-              var $target = $($(this).attr('href')),
-                  $item = $(this);
-
-              if (!$item.hasClass('disabled')) {
-                  navListItems.removeClass('btn-info').addClass('btn-pink');
-                  $item.addClass('btn-info');
-                  allWells.hide();
-                  $target.show();
-                  $target.find('input:eq(0)').focus();
-              }
-          });
-
-          allPrevBtn.click(function(){
-              var curStep = $(this).closest(".setup-content-3"),
-                  curStepBtn = curStep.attr("id"),
-                  prevStepSteps = $('div.setup-panel-3 div a[href="#' + curStepBtn + '"]').parent().prev().children("a");
-
-                  prevStepSteps.removeAttr('disabled').trigger('click');
-          });
-
-          allNextBtn.click(function(){
-              var curStep = $(this).closest(".setup-content-3"),
-                  curStepBtn = curStep.attr("id"),
-                  nextStepSteps = $('div.setup-panel-3 div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
-                  curInputs = curStep.find("input[type='text'],input[type='url']"),
-                  isValid = true;
-
-              $(".form-group").removeClass("has-error");
-                  for(var i=0; i< curInputs.length; i++){
-                      if (!curInputs[i].validity.valid){
-                          isValid = false;
-                          $(curInputs[i]).closest(".form-group").addClass("has-error");
-                      }
-                  }
-
-                  if (isValid)
-                      nextStepSteps.removeAttr('disabled').trigger('click');
-          });
-
-          $('div.setup-panel-3 div a.btn-info').trigger('click');
-        });
-      </script>
-    </main>
-  </body>
-  <footer class="page-footer font-small pt-2 bottom">
-
-      <!-- Footer Elements -->
-      <div class="container">
-
-        <!-- Social buttons -->
-        <ul class="list-unstyled list-inline text-center">
-          <li class="list-inline-item">
-            <a href='https://www.github.com/hkneal'class="btn-floating btn-fb mx-1">
-              <i class="fa fa-github"> </i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a href='https://www.linkedin.com/in/hiram-neal' class="btn-floating btn-li mx-1">
-              <i class="fa fa-linkedin"> </i>
-            </a>
-          </li>
-        </ul>
-        <!-- Social buttons -->
-
-      </div>
-      <!-- Footer Elements -->
-
-      <!-- Copyright -->
-      <div class="footer-copyright text-center py-3">© 2018 Copyright:
-        <a href="http://www.hiramneal.com"> HiramNeal.com</a>
-      </div>
-      <!-- Copyright -->
-    </footer>
-
-</html>
+        </div>
+{% endblock %}

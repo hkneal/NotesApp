@@ -116,6 +116,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Redirect to home URL after logout (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 #Extending the USER model for future use
 # AUTH_USER_MODEL = 'users.CustomUser'
 

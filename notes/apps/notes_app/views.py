@@ -1,18 +1,17 @@
 from django.shortcuts import render, redirect
 
-#Required to handle Login/Registration authentication and forms
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic.edit import UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import login
 
 from django.contrib.auth.models import User
 from .models import Note, Label
 from .forms import SignupForm, LoginForm, CreateNoteForm, CreateLabelForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 #Handle Email message for registration token and authentication
 from django.utils.encoding import force_bytes, force_text
@@ -45,30 +44,56 @@ def generateNotesList(req):
     notes = user.note_set.all()
     return notes
 
-def returnHome():
-    context = {
-        'error_message' : "You must be logged in to perform that function!",
-        **generateContext()
-    }
-    return context
-
 #Update and Delete View Classes
-class NoteUpdate(UpdateView):
+#Create note, Create Label, and Update note use the same template, a check for object allows catering the template accordingly.
+class NoteCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    login_url = reverse_lazy('login')
     model = Note
-    fields = ['title', 'note']
-    template_name_suffix = 'Update_Form'
+    template_name_suffix = 'CreateUpdate_Form'
+    form_class = CreateNoteForm
+    success_url = reverse_lazy('accounts')
+    success_message = "You created a new note!"
 
-class NoteDelete(DeleteView):
+    #get the user.id for ForeignKey
+    def form_valid(self, form):
+        form.instance.notes = self.request.user
+        return super(NoteCreate, self).form_valid(form)
+
+class LabelCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    login_url = reverse_lazy('login')
+    model = Label
+    template_name_suffix = 'CreateLabel_form'
+    form_class = CreateLabelForm
+    success_url = reverse_lazy('accounts')
+    success_message = "You created a new label for your note!"
+
+    #get the note.id for ForeignKey, passed from urls
+    def form_valid(self, form):
+        form.instance.labels = Note.objects.get(pk=self.kwargs['pk'])
+        return super(LabelCreate, self).form_valid(form)
+
+class NoteUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    login_url = reverse_lazy('login')
+    model = Note
+    template_name_suffix = 'CreateUpdate_Form'
+    form_class = CreateNoteForm
+    success_url = reverse_lazy('accounts')
+    success_message = "Your note was successfully updated!"
+
+class NoteDelete(LoginRequiredMixin, DeleteView):
+    login_url = reverse_lazy('login')
     model = Note
     success_url = reverse_lazy('accounts')
     success_message = "Note was successfully deleted!"
 
+    #overriding to generate succcess message, mixin isn't yet enabled for delete
     def delete(self, request, *args, **kwargs):
         obj = self.get_object()
         messages.success(self.request, self.success_message)
         return super(NoteDelete, self).delete(request, *args, **kwargs)
 
 #Begin view definitions
+#Landing Page
 def index(req):
     #Return to home if user is logged in and authenticated
     if(checkAuth(req)):
@@ -87,7 +112,7 @@ def index(req):
 
     return render(req, 'notes_app/index.html', context)
 
-#!!!!! Update this to be the logged in home page
+#Main page for all Notes if user is authenticated
 def accounts(req):
     if (checkAuth(req)):
         notes = generateNotesList(req)
@@ -99,7 +124,6 @@ def accounts(req):
     else:
         context = generateContext()
         return render(req, 'notes_app/index.html', context)
-
 
 def signup(req):
     if req.method == 'POST':
@@ -153,37 +177,6 @@ def signup(req):
             context = generateContext()
             return render(req, 'notes_app/index.html', context)
 
-def Login(req):
-    if req.method == 'POST':
-        username = req.POST['username']
-        password = req.POST['password']
-        user = authenticate(req, username=username, password=password)
-        form = LoginForm(data=req.POST)
-        if user is not None:
-            login(req, user)
-        # if form.is_valid():
-            notes = generateNotesList(req)
-            context = {
-            'user': user,
-            'success_message' : 'You are Now Logged In!',
-            'notes_List' : notes
-            }
-            return render(req, 'notes_app/notesPage.html', context)
-        else:
-            #return HttpResponse('Activation link is invalid!')
-            context = {
-            'firstList' : FIRSTLIST,
-            'gotodiv' : 'step-3',
-            'loginForm' : form,
-            'signupForm' : SignupForm(),
-            'error_message' : 'Login information is incorrect!'
-            #Handle the retuned messages from the login form
-            }
-            return render(req, 'notes_app/index.html', context)
-    else:
-        context = generateContext()
-    return render(req, 'notes_app/index.html', context)
-
 def activate(req, uidb64, token):
     try:
         # uid = force_text(urlsafe_base64_decode(uidb64)) #Django 1.1
@@ -221,109 +214,4 @@ def activate(req, uidb64, token):
             'error_message' : 'Activation link is invalid!',
             **generateContext()
             }
-        return render(req, 'notes_app/index.html', context)
-
-@login_required
-def createNote(req):
-    if (checkAuth(req)):
-        user = req.user
-        if req.method == 'POST':
-            form = CreateNoteForm(req.POST)
-            if form.is_valid():
-                myNote = Note.objects.create(
-                notes_list_id = user.id,
-                title = form.cleaned_data['title'],
-                note = form.cleaned_data['note']
-                )
-
-                #Collect all of the notes created by our Authenticated User
-                notes = generateNotesList(req)
-
-                context = {
-                    'user': user,
-                    'notes_List': notes,
-                    'success_message' : 'You have created a new note!'
-                }
-                return render(req, 'notes_app/notesPage.html', context)
-            else:
-                context = {
-                    'user': user,
-                    'error_message' : "Form is Invalid!",
-                    'createNoteForm' : form
-                }
-                return render(req, 'notes_app/notesPage.html', context)
-
-        else:
-            context = {
-            'user' : user,
-            'createNoteForm' : CreateNoteForm()
-            }
-            return render(req, 'notes_app/notesPage.html', context)
-    else:
-        context = returnHome()
-        return render(req, 'notes_app/index.html', context)
-
-@login_required
-def createLabel(req, pk):
-    print("In createLabel")
-    if (checkAuth(req)):
-        user = req.user
-        if req.method == 'POST':
-            form = CreateLabelForm(req.POST)
-            if form.is_valid():
-                Label.objects.create(
-                labels_list_id = pk,
-                label = form.cleaned_data['label']
-                )
-                notes = generateNotesList(req)
-                context = {
-                    'user': user,
-                    'notes_List': notes,
-                    'success_message' : 'Note Label Created!'
-                }
-                return render(req, 'notes_app/notesPage.html', context)
-            else:
-                context = {
-                    'user': user,
-                    'error_message' : "Form is Invalid!",
-                    'createLabelForm' : form
-                }
-                return render(req, 'notes_app/notesPage.html', context)
-        else:
-            noteTitle = Note.objects.get(id=pk).title
-            context = {
-                'user': user,
-                'note_id' : pk,
-                'noteTitle' : noteTitle,
-                'createLabelForm' : CreateLabelForm()
-            }
-            return render(req, 'notes_app/notesPage.html', context)
-    else:
-        context = returnHome()
-        return render(req, 'notes_app/index.html', context)
-
-@login_required
-def searchLabel(req, id):
-    pass
-    #add a view for current labels in modal
-    #Used to collect the ForeignKey path back up to User, reduces DB hits
-    # notes = user.note_set.all()
-    # myLabel = Label.objects.select_related('notes__users').get(notes_id=id)
-    #
-    # myNote = myLabel.notes
-    # myUser = myNote.users
-    # print(myNote.title)
-    # print(myUser.first_name)
-
-def Logout(req):
-    if (checkAuth(req)):
-        logout(req)
-        logged_in = False
-        context = {
-            'success_message' : ' You Have Logged Out',
-            **generateContext()
-        }
-        return render(req, 'notes_app/index.html', context)
-    else:
-        context = generateContext()
         return render(req, 'notes_app/index.html', context)

@@ -1,0 +1,50 @@
+{% extends 'notes_app/base.html' %}
+
+{% block content %}
+  {% load staticfiles %}
+    <header class="menuHeader">
+      <h1>Welcome {{ user.first_name }},</h1>
+      {% if object %}
+        <h4>To submit your changes to the note click the "Update" button. </h4>
+      {% else %}
+        <h4>To create a new note click the "Create" button. </h4>
+      {% endif %}
+
+    </header>
+
+    <div class="card mb-5">
+      <div class="card-body mb-5 pb-5">
+        <div class="container">
+          <div class="form-group">
+            {% if object %}
+              <form  role="form"  method="post" novalidate>
+            {% else %}
+              <form  role="form" action="{% url 'createNote' %}" method="post" novalidate>
+            {% endif %}
+              {% csrf_token %}
+              <div class="form-group">
+                  {% for field in form %}
+                  <div class="form-group md-form">
+                    <!-- {{ field.label_tag }} -->
+                    {{ field }}
+                    <label style="width: 100%" for="{{ field.name }}" data-error="{{ field.help_text }}" >{{ field.label }}</label>
+                    {% if field.errors %}
+                      {% for error in field.errors %}
+                        <small><a href="#id_{{ field.name }}">{{ error|escape }}</a></small>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                  <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1" size="2x"></i>Cancel</a>
+                  {% if object %}
+                    <button class="btn btn-success btn-rounded float-right" type="submit"><i class="fa fa-wrench mr-1" size="2x"></i>Update</button>
+                  {% else %}
+                    <button class="btn btn-success btn-rounded float-right" type="submit"><i class="fa fa-check-square-o mr-1" size="2x"></i>Create</button>
+                  {% endif %}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

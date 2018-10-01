@@ -7,6 +7,9 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Note, Label
+import re
+
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9\.\+_-]+@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
 
 def validateName(strInput):
     if not strInput.replace(' ','').isalpha():
@@ -27,6 +30,14 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('first_name','last_name', 'email', 'username', 'password1', 'password2')
 
+    def clean_email(self):
+        thisEmail = self.cleaned_data['email']
+        if User.objects.filter(email=thisEmail).exists():
+            raise ValidationError('Email already exists!')
+        elif not EMAIL_REGEX.match(thisEmail):
+            raise ValidationError('Please enter a valid email address')
+        return thisEmail
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control validate'}), required=True, min_length=8, max_length=150, help_text='Please enter in your Username')
     password = forms.CharField(label='Enter password', widget=forms.PasswordInput(attrs={'class': 'form-control validate'}), required=True, min_length=8, max_length=45, help_text='Password Must be at least 8 characters')
@@ -34,7 +45,7 @@ class LoginForm(AuthenticationForm):
         model = User
         fields = ('username', 'password')
 
-class CreateNoteForm(forms.Form):
+class CreateNoteForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control validate', 'placeholder' : 'Add Title (required)' }),required=True, max_length=45, help_text='Title must be less than 45 characters')
     note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control validate', 'placeholder' : 'Note (required)'}), required=True, max_length=500, help_text='You can\'t create a note without typing in the note :)')
 
@@ -50,9 +61,9 @@ class CreateNoteForm(forms.Form):
             raise ValidationError('Note Should Be Less Than 500 Characters')
         return thisNote
 
-class CreateLabelForm(forms.Form):
+class CreateLabelForm(forms.ModelForm):
     label = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control validate'}),required=True, max_length=45, help_text='Label must be less than 45 characters')
 
     class Meta:
-        model = Note
-        fields = ('label')
+        model = Label
+        fields = ('label',)
