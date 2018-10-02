@@ -152,4 +152,90 @@
         </div>
       </div>
       {% endif %}
+
+    <!-- {% if labelList %}
+      {% for label in labelList %}
+        {{ label.label }}
+      {% endfor %}
+    {% endif %} -->
+
+    <!--search results -->
+    {% if notes_search_List %}
+    <div class="container">
+        <div class="card mb-5 pt-1">
+            <div id="noteRow" class="row">
+              {% for note in notes_search_List %}
+              <!-- Rotating card -->
+              <div id="noteCardWrapper" class="card-wrapper m-3">
+                <div id="{{ note.id }}" class="card-rotating effect__click text-center h-100 w-100">
+
+                  <!-- Front Side -->
+                  <div class="face front scrollbar scrollbar-info">
+
+                    <!-- Image-->
+
+                    <div class="card-up">
+                        <a class="rotate-btn" data-card="{{ note.id }}">
+                      <!-- <a id="noteA-tag" href="#{{ note.id }}" data-toggle="modal" data-target="#{{ note.id }}"> -->
+                        <img class="card-img-top"  src="{% static 'notes_app/img/stickyNote.png' %}" alt="thumbnail" style="width: 10rem">
+                        <p id="noteTitle">{{ note.title }}</p></a>
+                      <!-- </a> -->
+                      <!-- <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%2859%29.jpg" class="img-fluid"> -->
+                    </div>
+                    <!--Avatar-->
+                    <div class="avatar">
+                      <!-- <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20%289%29.jpg" class="rounded-circle img-responsive"> -->
+                    </div>
+                    <!--Content-->
+                    <div class="card-body">
+                      <!-- <h4>{{ note.title }}</h4> -->
+                      <!-- <p>Web developer</p> -->
+                      <!--Triggering button-->
+                      <a class="rotate-btn" data-card="{{ note.id }}">
+                        <i class="fa fa-repeat"></i> Click to rotate</a>
+                    </div>
+                  </div>
+                  <!--/.Front Side-->
+
+                  <!--Back Side-->
+                  <!-- Back Side -->
+
+                  <div class="face back scrollbar scrollbar-info">
+                      <div class="card-body force-overflow">
+                        <a class="rotate-btn" data-card="{{ note.id }}">
+                        <!--Content-->
+                        <h4>Note:</h4>
+                        <hr>
+                        <p>{{ note.note }}</p>
+                        <hr>
+
+                        <small> Current Labels:
+                          {% for label in note.label_set.all %}
+                            {{ label.label }}.
+                          {% endfor %}
+                        </small>
+                      </a>
+                        <!--Nav Icons-->
+                        <div class="row m-1">
+                          <!-- <a class="btn-sm btn-mdb-color btn-rounded float-left" href="{% url 'createLabel' note.id %}"><i class="fa fa-envelope-open-o mr-1" size="2x"></i>Email</a> -->
+                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'createLabel' note.id %}"><i class="fa fa-bookmark-o mr-1" size="2x"></i>Label</a>
+                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'updateNote' note.id %}"><i class="fa fa-wrench mr-1" size="2x"></i>Update</a>
+                          <a class="btn-sm btn-danger btn-rounded" href="{% url 'delete_note' note.id %}"><i class="fa fa-trash-o mr-1" size="2x"></i>Delete</a>
+                        </div>
+
+                        <!--Triggering button-->
+                        <br>
+                        <a class="rotate-btn" data-card="{{ note.id }}">
+                          <i class="fa fa-undo"></i> Click to rotate back</a>
+                      </div>
+                  </div>
+                  <!--/.Back Side-->
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+      <!--/.Rotating card-->
 {% endblock %}

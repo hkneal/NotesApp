@@ -13,6 +13,7 @@ urlpatterns = [
   path('index/', views.index, name='index'),  	#With Django 2.0
   path('signup/', views.signup, name='signup'),
   path('accounts/', views.accounts, name='accounts'),
+  path('accounts/search/', views.search, name='search'),
   path('accounts/login/', auth_views.LoginView.as_view(template_name='notes_app/registration/login.html', authentication_form=LoginForm), name='login'),
   path('accounts/password_reset/', auth_views.PasswordResetView.as_view(template_name='notes_app/registration/password_reset_form.html'), name='reset'),
   path('accounts/password_reset/done/', auth_views.PasswordResetView.as_view(template_name='notes_app/registration/password_reset_done.html')),

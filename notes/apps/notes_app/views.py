@@ -1,24 +1,28 @@
 from django.shortcuts import render, redirect
 
 from django.urls import reverse_lazy
-from django.contrib.sites.shortcuts import get_current_site
 
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import login
-
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
 from .models import Note, Label
+from django.db.models import Q
+
 from .forms import SignupForm, LoginForm, CreateNoteForm, CreateLabelForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 #Handle Email message for registration token and authentication
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
+
 
 
 FIRSTLIST = ['first_name', 'last_name', 'email']
@@ -212,6 +216,60 @@ def activate(req, uidb64, token):
         print(user)
         context = {
             'error_message' : 'Activation link is invalid!',
+            **generateContext()
+            }
+        return render(req, 'notes_app/index.html', context)
+
+# @login_required
+def search(req):
+    print("in search")
+    if(checkAuth(req)):
+        if req.method=='POST':
+            postData = req.POST['search_input']
+            print(postData)
+
+            # labelList = Label.objects.filter(Q(label__iexact=postData) and
+            # labels = Label.objects.select_related('note').filter(Q(label__iexact=postData) and
+            labelList = Label.objects.filter(Q(label__iexact=postData) |
+                    Q(label__icontains=postData) |
+                    Q(label__istartswith=postData) |
+                    Q(label__iendswith=postData))
+            #get the note object from the labels list
+            notes = Note.objects.filter(Q(id__in=labelList.values('labels_id')))
+
+            #get all note objects matching the search input
+            noteslist = Note.objects.filter(Q(title__iexact=postData) |
+                    Q(title__icontains=postData) |
+                    Q(title__istartswith=postData) |
+                    Q(title__iendswith=postData))
+
+            if(noteslist.count()>0):
+                print(noteslist.query)
+            #merge the two querysets
+            notes_search_List = noteslist.union(notes)
+            # labelList = labels.note.filter(note_id = req.user)
+            if(notes_search_List.count()>0):
+                success_message = "These are your search results"
+                context = {
+                    'success_message' : success_message,
+                    'notes_search_List' : notes_search_List
+                    }
+            else:
+                error_message = "There were no notes containing that search input."
+                context = {
+                    'error_message' : error_message,
+                    }
+            return render(req, 'notes_app/notesPage.html', context)
+        else:
+            context = {
+            'error_message' : 'Inactive method',
+            **generateContext()
+            }
+            return render(req, 'notes_app/index.html', context)
+    else:
+        success_message = "Please log in to search through your personal notes."
+        context = {
+            'success_message' : success_message,
             **generateContext()
             }
         return render(req, 'notes_app/index.html', context)
