@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
+from django.contrib.auth import login
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
