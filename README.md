@@ -5,6 +5,23 @@ Repository for the NotesApp API and Web Application
 http://InputMyNote.com
 
 # API Endpoints
+
+/api/note/  (GET / POST)
+
+    Returns a list of your notes or allows a POST of a single note
+    
+/api/label/ (GET / POST) 
+
+    Returns a list of labels associated with your notes or allows a POST of a single label
+    
+/api/note/<int:pk>/ (GET) 
+
+    Returns a specific note (by id num) 
+   
+/api/label/<int:pk>/ (GET)
+
+    Returns a specific label
+    
 /rest-auth/login/ (POST) 
 
     username
@@ -24,13 +41,92 @@ http://InputMyNote.com
     new_password1
     new_password2
 
-http://inputmynote/api/note/  GET a list of your notes or POST a single note
-http://inputmynote/api/label/ GET a list of labels associated with your notes or POST a label
-http://inputmynote/api/note/<int:pk>/ GET a specific note (by id num) 
-http://inputmynote/api/label/<int:pk>/ GET a specific label
-http://inputmynote/api/rest_auth/password/reset/ Reset the 
-http://inputmynote/api/rest_auth/password/reset/confirm/$ [name='rest_password_reset_confirm']
-http://inputmynote/api/rest_auth/login/$ [name='rest_login']
-http://inputmynote/api/rest_auth/logout/$ [name='rest_logout']
-http://inputmynote/api/rest_auth/user/$ [name='rest_user_details']
-http://inputmynote/api/rest_auth/password/change/$ [name='rest_password_change']
+/rest-auth/password/change/ (POST)
+
+    new_password1
+    new_password2
+    old_password
+    
+/rest-auth/user/ (GET, PUT, PATCH)
+
+    username
+    first_name
+    last_name
+    Returns pk, username, email, first_name, last_name
+    
+
+
+#API Registration
+
+/rest-auth/registration/ (POST)
+
+    username
+    password1
+    password2
+    email
+    
+/rest-auth/registration/verify-email/ (POST)
+
+    key
+    
+# Installation
+
+    Pull repository and from a terminal window navigate into the NotesApp folder.
+    $cd NotesApp
+
+Install & start virtualenv, these commands are issued from a terminal command within the 
+    
+    $ pip install virtualenv
+    $ virtualenv <virtualenv name>
+    $ source <virtualenv name>/bin/activate
+    
+Install system requirements
+
+    $ brew install Python3
+        for instructions on how to install Homebrew (brew) => https://www.howtogeek.com/211541/homebrew-for-os-x-easily-installs-desktop-apps-and-terminal-utilities/
+        
+    $ pip install 3.6-dev
+    
+    - Navigate into the "notes" folder where you will find "requirements.txt" file
+    $ cd notes
+    $ pip install -r requirements.txt
+    
+    - Navigate into the app folder
+    $ cd notes  //again you sould now be at NotesApp/notes/notes
+    
+    - create settings.ini & notesCNF.cnf files:
+    
+        settings.ini:
+        
+        [settings]
+        SECRET_KEY = 8qlg)=96i@@&y5u!&6qc(w_b4nay3+wvpx&!uibp9utjuknj!d
+        EMAIL_USE_TLS = True
+        EMAIL_HOST = <your email host>
+        EMAIL_HOST_USER = <emai username>
+        EMAIL_HOST_PASSWORD = <email password>
+        EMAIL_PORT = 587
+        DEFAULT_FROM_EMAIL = Adminstrator <admin@inputmynote.awsapps.com>
+        AWS_ACCESS_KEY_ID = <your AWS access ID>
+        AWS_SECRET_ACCESS_KEY = <your AWS access key>
+        
+        notes.CNF.cnf:
+        
+        [client]
+        name = notesApp
+        host = localhost
+        user = root
+        password = <your MySQL password>
+        default-character-set = utf8MB4
+    
+    Connect to your MySQL Database
+    $ mysql -u root -p (then enter password at prompt)
+    > CREATE DATABASE notesAPP
+    > exit
+    
+    Setup and start Django 
+    $ cd .. (should now be in NotesApp/notes)
+    $ python manage.py makemigrations
+    $ python manage.py migrate
+    $ python manage.py runserver
+    
+
