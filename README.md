@@ -6,6 +6,7 @@ http://InputMyNote.com
 
 # API Endpoints
 /rest-auth/login/ (POST) 
+
     username
     email
     password
