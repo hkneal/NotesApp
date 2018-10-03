@@ -90,6 +90,7 @@ Install system requirements
     - Navigate into the "notes" folder where you will find "requirements.txt" file
     $ cd notes
     $ pip install -r requirements.txt
+    $ export DYLD_LIBRARY_PATH=/usr/local/mysql/lib/
     
     - Navigate into the app folder
     $ cd notes  //again you sould now be at NotesApp/notes/notes
