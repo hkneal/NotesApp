@@ -2,7 +2,7 @@
 Repository for the NotesApp API and Web Application
 
 # Website URL
-http://InputMyNote.com
+https://InputMyNote.com
 
 # API Endpoints
 
