@@ -24,6 +24,9 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
 
+from django.http import HttpResponse, Http404
+
+
 
 
 FIRSTLIST = ['first_name', 'last_name', 'email']
@@ -74,7 +77,10 @@ class LabelCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     #get the note.id for ForeignKey, passed from urls
     def form_valid(self, form):
-        form.instance.labels = Note.objects.get(pk=self.kwargs['pk'])
+        noteObj = Note.objects.get(pk=self.kwargs['pk'])
+        form.instance.labels = noteObj
+        if self.request.user != noteObj.notes:
+            return Http404("You are not allowed to create a label on this note!")
         return super(LabelCreate, self).form_valid(form)
 
 class NoteUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -151,6 +157,7 @@ def signup(req):
                         mail_subject, message, to=[to_email]
             )
             email.send()
+            #send_mail(mail_subject, message, 'admin@inputmynote.awsapps.com', [to_email], fail_silently=False,)
 
             context= {
                 'gotodiv' : 'step-3',
@@ -228,27 +235,27 @@ def search(req):
         if req.method=='POST':
             postData = req.POST['search_input']
             print(postData)
-
-            # labelList = Label.objects.filter(Q(label__iexact=postData) and
-            # labels = Label.objects.select_related('note').filter(Q(label__iexact=postData) and
+            
+            #get all of the label objects containing our search string
             labelList = Label.objects.filter(Q(label__iexact=postData) |
                     Q(label__icontains=postData) |
                     Q(label__istartswith=postData) |
                     Q(label__iendswith=postData))
-            #get the note object from the labels list
-            notes = Note.objects.filter(Q(id__in=labelList.values('labels_id')))
+            #get the note object from the labels list & filter only user created
+            user = req.user
+            notes_from_lables = Note.objects.filter(Q(id__in=labelList.values('labels_id'))).filter(notes_id=user.pk)
 
-            #get all note objects matching the search input
+            #get all note objects matching the search input & filter only user created
             noteslist = Note.objects.filter(Q(title__iexact=postData) |
                     Q(title__icontains=postData) |
                     Q(title__istartswith=postData) |
-                    Q(title__iendswith=postData))
+                    Q(title__iendswith=postData)).filter(notes_id=user.pk)
 
             if(noteslist.count()>0):
                 print(noteslist.query)
             #merge the two querysets
-            notes_search_List = noteslist.union(notes)
-            # labelList = labels.note.filter(note_id = req.user)
+            notes_search_List = noteslist.union(notes_from_lables)
+        
             if(notes_search_List.count()>0):
                 success_message = "These are your search results"
                 context = {

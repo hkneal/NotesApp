@@ -1,0 +1,3 @@
+From: admin@inputmynote.awsapps.com
+To: success@simulator.amazonses.com
+Subject: Curl Test
