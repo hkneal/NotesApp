@@ -36,9 +36,9 @@ main {
   background-color: #126087 !important;
 }
 
-.blueToolTip + .tooltip > .tooltip-inner{
+/* .blueToolTip + .tooltip > .tooltip-inner{
   background-color: #186185;
-}
+} */
 
 .col-md-2 {
   max-width: 8vw !important;

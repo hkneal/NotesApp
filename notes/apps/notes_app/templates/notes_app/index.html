@@ -15,7 +15,7 @@
               <div class="steps-form-3">
                   <div class="steps-row-3 setup-panel-3 d-flex justify-content-between">
                       <div class="steps-step-3">
-                          <a href="#step-1" type="button" class="btn btn-info btn-circle-3 waves-effect ml-0" data-toggle="tooltip" data-placement="top" title="Create New Account (Step 1)" class="blueToolTip"><i class="fa fa-folder-open-o" aria-hidden="true"></i></a>
+                          <a href="#step-1" type="button" class="btn btn-info btn-circle-3 waves-effect ml-0" data-toggle="tooltip" data-placement="top" title="Create New Account (Step 1)"><i class="fa fa-folder-open-o" aria-hidden="true"></i></a>
                       </div>
                       <div class="steps-step-3">
                           <a href="#step-2" type="button" class="btn btn-pink btn-circle-3 waves-effect p-3" data-toggle="tooltip" data-placement="top" title="Create New Account (Step 2)"><i class="fa fa-user" aria-hidden="true"></i></a>
@@ -34,7 +34,7 @@
           <!-- Grid column -->
           {% if signupForm %}
           <!-- First Step -->
-              <form  role="form" action="{% url 'signup' %}" method="post" novalidate>
+              <form action="{% url 'signup' %}" method="post" novalidate>
                 {% csrf_token %}
                 <div class="row setup-content-3" id="step-1">
                     <div class="col-md-12">
@@ -55,7 +55,7 @@
                             <div class="form-group md-form">
                               <!-- {{ field.label_tag }} -->
                               {{ field }}
-                              <label id="fieldLabel" style="width: 100%" for="{{ field.name }}" data-error="{{ field.help_text }}" >{{ field.label }}</label>
+                              <label style="width: 100%" for="{{ field.name }}" data-error="{{ field.help_text }}" >{{ field.label }}</label>
                               {% if field.errors %}
                                 {% for error in field.errors %}
                                   <small><a href="#id_{{ field.name }}">{{ error|escape }}</a></small>
@@ -80,7 +80,7 @@
                             <div class="form-group md-form">
                               <!-- {{ field.label_tag }} -->
                               {{ field }}
-                              <label id="fieldLabel" control-label style="width: 100%" for="{{ field.name }}" data-error="{{ field.help_text }}" >{{ field.label }}</label>
+                              <label control-label style="width: 100%" for="{{ field.name }}" data-error="{{ field.help_text }}" >{{ field.label }}</label>
                               {% if field.errors %}
                                 {% for error in field.errors %}
                                   <small><a href="#id_{{ field.name }}">{{ error|escape }}</a></small>

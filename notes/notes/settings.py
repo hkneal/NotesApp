@@ -27,7 +27,8 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['inputmynote.com']
+# ALLOWED_HOSTS = ['inputmynote.com']
+ALLOWED_HOSTS = []
 
 #AWS
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
@@ -160,4 +161,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+# STATIC_ROOT = os.path.join(BASE_DIR, "static/")
