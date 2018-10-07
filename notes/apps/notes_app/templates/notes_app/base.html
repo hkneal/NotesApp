@@ -76,11 +76,11 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
       <!-- JQuery -->
-      <script type="text/javascript" src="{% static 'notes_app/js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'notes_app/js/jquery-3.3.1.min.js' %}"></script>
       <!-- MDBootstrap -->
-      <script type="text/javascript" src="{% static 'notes_app/js/mdb.min.js' %}"></script>
+      <script src="{% static 'notes_app/js/mdb.min.js' %}"></script>
 
-      <script type="text/javascript">
+      <script>
       $(document).ready(function () {
           var navListItems = $('div.setup-panel-3 div a'),
               allWells = $('.setup-content-3'),
@@ -135,7 +135,6 @@
         });
       </script>
     </main>
-  </body>
   <footer class="page-footer font-small pt-2 bottom">
 
       <!-- Footer Elements -->
@@ -165,5 +164,5 @@
       </div>
       <!-- Copyright -->
     </footer>
-
+  </body>
 </html>

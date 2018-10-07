@@ -6,7 +6,7 @@
       <h1>Welcome {{ user.first_name }},</h1>
       <h4>To submit your changes to the note click the "Update" button. </h4>
     </header>
-    
+
     <div class="card mb-5">
       <div class="card-body mb-5 pb-5">
         <div class="container">
@@ -21,8 +21,8 @@
                     <!-- {{ field.label_tag }} -->
                     <form method="post">
                         <p>Are you sure you want to delete "{{ object }}"?</p>
-                        <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1" size="2x"></i>Cancel</a>
-                        <button class="btn btn-danger btn-rounded float-right" type="submit"><i class="fa fa-trash-o mr-1" size="2x"></i>Delete</button>
+                        <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1"></i>Cancel</a>
+                        <button class="btn btn-danger btn-rounded float-right" type="submit"><i class="fa fa-trash-o mr-1"></i>Delete</button>
                     </form>
                   </div>
               </div>

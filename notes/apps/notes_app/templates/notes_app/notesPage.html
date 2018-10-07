@@ -6,7 +6,7 @@
       <h1>Welcome {{ user.first_name }},</h1>
       <h4>Below you will find all your notes.  For a new note, click the create button. </h4>
       <div class="col-6">
-        <a class="btn btn-mdb-color btn-rounded" href="{% url 'createNote' %}"><i class="fa fa-pencil-square-o mr-1" size="2x"></i>Create</a>
+        <a class="btn btn-mdb-color btn-rounded" href="{% url 'createNote' %}"><i class="fa fa-pencil-square-o mr-1"></i>Create</a>
       </div>
     </header>
 
@@ -97,9 +97,9 @@
                         <!--Nav Icons-->
                         <div class="row m-1">
                           <!-- <a class="btn-sm btn-mdb-color btn-rounded float-left" href="{% url 'createLabel' note.id %}"><i class="fa fa-envelope-open-o mr-1" size="2x"></i>Email</a> -->
-                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'createLabel' note.id %}"><i class="fa fa-bookmark-o mr-1" size="2x"></i>Label</a>
-                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'updateNote' note.id %}"><i class="fa fa-wrench mr-1" size="2x"></i>Update</a>
-                          <a class="btn-sm btn-danger btn-rounded" href="{% url 'delete_note' note.id %}"><i class="fa fa-trash-o mr-1" size="2x"></i>Delete</a>
+                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'createLabel' note.id %}"><i class="fa fa-bookmark-o mr-1"></i>Label</a>
+                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'updateNote' note.id %}"><i class="fa fa-wrench mr-1"></i>Update</a>
+                          <a class="btn-sm btn-danger btn-rounded" href="{% url 'delete_note' note.id %}"><i class="fa fa-trash-o mr-1"></i>Delete</a>
                         </div>
 
                         <!--Triggering button-->
@@ -142,7 +142,7 @@
                         <small><a href="#id_{{ field.name }}">{{ error|escape }}</a></small>
                       {% endfor %}
                     {% endif %}
-                    <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1" size="2x"></i>Cancel</a>
+                    <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1"></i>Cancel</a>
                     <button class="btn btn-success btn-rounded float-right" type="submit">Add Label</button>
                   </div>
                   {% endfor %}
@@ -218,9 +218,9 @@
                         <!--Nav Icons-->
                         <div class="row m-1">
                           <!-- <a class="btn-sm btn-mdb-color btn-rounded float-left" href="{% url 'createLabel' note.id %}"><i class="fa fa-envelope-open-o mr-1" size="2x"></i>Email</a> -->
-                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'createLabel' note.id %}"><i class="fa fa-bookmark-o mr-1" size="2x"></i>Label</a>
-                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'updateNote' note.id %}"><i class="fa fa-wrench mr-1" size="2x"></i>Update</a>
-                          <a class="btn-sm btn-danger btn-rounded" href="{% url 'delete_note' note.id %}"><i class="fa fa-trash-o mr-1" size="2x"></i>Delete</a>
+                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'createLabel' note.id %}"><i class="fa fa-bookmark-o mr-1"></i>Label</a>
+                          <a class="btn-sm btn-mdb-color btn-rounded" href="{% url 'updateNote' note.id %}"><i class="fa fa-wrench mr-1"></i>Update</a>
+                          <a class="btn-sm btn-danger btn-rounded" href="{% url 'delete_note' note.id %}"><i class="fa fa-trash-o mr-1"></i>Delete</a>
                         </div>
 
                         <!--Triggering button-->

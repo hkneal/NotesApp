@@ -34,11 +34,11 @@
                         {% endif %}
                       </div>
                       {% endfor %}
-                      <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1" size="2x"></i>Cancel</a>
-                      <button class="btn btn-success btn-rounded float-right" type="submit"><i class="fa fa-wrench mr-1" size="2x"></i>Update</button>
+                      <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1"></i>Cancel</a>
+                      <button class="btn btn-success btn-rounded float-right" type="submit"><i class="fa fa-wrench mr-1"></i>Update</button>
                   </div>
                 {% endif %}
-              </form> 
+              </form>
             {% else %}
               <form  role="form" action="{% url 'createNote' %}" method="post" novalidate>
               {% csrf_token %}
@@ -55,8 +55,8 @@
                     {% endif %}
                   </div>
                   {% endfor %}
-                  <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1" size="2x"></i>Cancel</a>
-                    <button class="btn btn-success btn-rounded float-right" type="submit"><i class="fa fa-check-square-o mr-1" size="2x"></i>Create</button>
+                  <a href="{% url 'accounts' %}" class="btn btn-mdb-color btn-rounded float-left"><i class="fa fa-window-close-o mr-1"></i>Cancel</a>
+                    <button class="btn btn-success btn-rounded float-right" type="submit"><i class="fa fa-check-square-o mr-1"></i>Create</button>
               </div>
               </form>
              {% endif %}
