@@ -100,7 +100,7 @@ Install system requirements
         settings.ini:
         
         [settings]
-        SECRET_KEY = 8qlg)=96i@@&y5u!&6qc(w_b4nay3+wvpx&!uibp9utjuknj!d
+        SECRET_KEY = <your secret key>
         EMAIL_USE_TLS = True
         EMAIL_HOST = <your email host>
         EMAIL_HOST_USER = <emai username>
