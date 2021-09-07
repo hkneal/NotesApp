@@ -1,0 +1,11 @@
+{
+    "dev": {
+        "aws_region": "us-west-2",
+        "django_settings": "notes.settings",
+        "profile_name": "hkneal",
+        "project_name": "notes",
+        "runtime": "python3.8",
+        "s3_bucket": "notesapp-zappa",
+        "remote_env": "s3://notesapp-secrets/appserects.json"
+    }
+}

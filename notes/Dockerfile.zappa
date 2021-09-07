@@ -1,0 +1,11 @@
+FROM lambci/lambda:build-python3.8
+
+ADD . /var/task
+WORKDIR  /var/task
+
+RUN yum -y --quiet install postgresql-devel
+
+RUN python3 -m venv /opt/venv
+RUN STATIC_DEPS=true /opt/venv/bin/pip install -r requirements.txt
+
+CMD ["bash"]

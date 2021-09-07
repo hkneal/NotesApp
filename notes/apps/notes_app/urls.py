@@ -8,6 +8,8 @@ from . import views
 
 from .forms import LoginForm
 
+app_name = 'notes_app'
+
 urlpatterns = [
   path('', views.index, name='index'),
   path('index/', views.index, name='index'),  	#With Django 2.0

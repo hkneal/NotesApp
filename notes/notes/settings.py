@@ -24,11 +24,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 # ALLOWED_HOSTS = ['inputmynote.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1:8000', 
+    'localhost:8000', 
+    'https://inputmynote.com',
+    '4q8lt5v1gf.execute-api.us-west-2.amazonaws.com'
+    ]
 
 #AWS
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
@@ -88,12 +93,16 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ENGINE' : 'django.db.backends.mysql',
-        'NAME' : 'notesApp',
-        'HOST' : 'localhost',
-        'OPTIONS' : {
-            'read_default_file' : 'notes/notesCNF.cnf',
-        },
+        # 'ENGINE' : 'django.db.backends.mysql',
+        'ENGINE' : 'django.db.backends.postgresql_psycopg2',
+        'NAME' : config('DB_NAME'),
+        'USER' : config('DB_USER'),
+        'PASSWORD' : config('DB_PASS'),
+        'HOST' : config('DB_URL'),
+        'PORT' : config('DB_PORT')
+        # 'OPTIONS' : {
+        #     'read_default_file' : 'notes/notesCNF.cnf',
+        # },
     }
 }
 
@@ -161,4 +170,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
